@@ -1,0 +1,23 @@
+---
+driver:
+  name: vagrant
+  synced_folders:
+   - ["./results", "/tmp/results"]
+
+provisioner:
+  name: shell
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-7
+
+suites:
+  - name: default
+    provisioner:
+      arguments: ["<%= ENV['HAB_ORIGIN'] %>", "chef_docker_wrapper"]
+    verifier:
+      inspec_tests:
+        - test/integration/default
+    attributes:
