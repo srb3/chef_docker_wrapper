@@ -1,26 +1,16 @@
 desc 'lint, build artifact and test in kitchen, upload to unstable channel if test pass'
 task :build_test_stable do
-  Rake::Task['lint:cs'].execute
-  Rake::Task['lint:fc'].execute
+  Rake::Task['lint'].execute
   Rake::Task['hab:hb'].execute
-  Rake::Task['kitchen:kd'].execute
-  Rake::Task['kitchen:kc'].execute
-  Rake::Task['kitchen:kcc'].execute
-  Rake::Task['kitchen:kv'].execute
-  Rake::Task['kitchen:kd'].execute
+  Rake::Task['kitchen:kt'].execute
   Rake::Task['hab:uu'].execute
 end
 
 desc 'lint, build artifact and test in kitchen, upload to stable channel if test pass'
 task :build_test_unstable do
-  Rake::Task['lint:cs'].execute
-  Rake::Task['lint:fc'].execute
+  Rake::Task['lint'].execute
   Rake::Task['hab:hb'].execute
-  Rake::Task['kitchen:kd'].execute
-  Rake::Task['kitchen:kc'].execute
-  Rake::Task['kitchen:kcc'].execute
-  Rake::Task['kitchen:kv'].execute
-  Rake::Task['kitchen:kd'].execute
+  Rake::Task['kitchen:kt'].execute
   Rake::Task['hab:us'].execute
 end
 
@@ -30,27 +20,18 @@ task :lint do
   Rake::Task['lint:fc'].execute
 end
 
-desc 'lint and kitchen destroy, create, test, destroy'
+desc 'lint and kitchen test'
 task :test do
-  Rake::Task['lint:cs'].execute
-  Rake::Task['lint:fc'].execute
-  Rake::Task['kitchen:kd'].execute
-  Rake::Task['kitchen:kc'].execute
-  Rake::Task['kitchen:kcc'].execute
-  Rake::Task['kitchen:kv'].execute
-  Rake::Task['kitchen:kd'].execute
+  Rake::Task['lint'].execute
+  Rake::Task['kitchen:kt'].execute
 end
 
-desc 'destroy, create and test'
+desc 'kitchen test'
 task :kitchen_test do
-  Rake::Task['kitchen:kd'].execute
-  Rake::Task['kitchen:kc'].execute
-  Rake::Task['kitchen:kcc'].execute
-  Rake::Task['kitchen:kv'].execute
-  Rake::Task['kitchen:kd'].execute
+  Rake::Task['kitchen:kt'].execute
 end
 
-desc 'create and test'
+desc 'kitchen create, converge, verify and test'
 task :kitchen_test_dirty do
   Rake::Task['kitchen:kc'].execute
   Rake::Task['kitchen:kcc'].execute
@@ -70,33 +51,30 @@ namespace :lint do
   end
 end
 
-def kitchen_cmd
-  if ENV['KITCHEN_YAML']
-    "KITCHEN_YAML=#{ENV['KITCHEN_YAML']} kitchen"
-  else
-    'KITCHEN_YAML=kitchen.local.yml kitchen'
-  end
-end
-
 namespace :kitchen do
   desc 'kitchen create'
   task :kc do
-    sh "#{kitchen_cmd} create"
+    sh 'kitchen create'
   end
 
   desc 'kitchen converge'
   task :kcc do
-    sh "#{kitchen_cmd} converge"
+    sh 'kitchen converge'
   end
 
-  desc 'kitchen test'
+  desc 'kitchen verify'
   task :kv do
-    sh "#{kitchen_cmd} verify"
+    sh 'kitchen verify'
   end
 
   desc 'kitchen destroy'
   task :kd do
-    sh "#{kitchen_cmd} destroy"
+    sh 'kitchen destroy'
+  end
+
+  desc 'kitchen test'
+  task :kt do
+    sh 'kitchen test'
   end
 end
 
