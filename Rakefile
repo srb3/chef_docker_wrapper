@@ -1,5 +1,5 @@
 desc 'lint, build artifact and test in kitchen, upload to unstable channel if test pass'
-task :build_test_stable do
+task :build_test_unstable do
   Rake::Task['lint'].execute
   Rake::Task['hab:hb'].execute
   Rake::Task['kitchen:kt'].execute
@@ -7,7 +7,7 @@ task :build_test_stable do
 end
 
 desc 'lint, build artifact and test in kitchen, upload to stable channel if test pass'
-task :build_test_unstable do
+task :build_test_stable do
   Rake::Task['lint'].execute
   Rake::Task['hab:hb'].execute
   Rake::Task['kitchen:kt'].execute
